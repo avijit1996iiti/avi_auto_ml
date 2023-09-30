@@ -1,4 +1,4 @@
-model_type: "classification"
+model_type: "regression"
 model_data: 
 number_of_classes: 2
 models_to_run: {
