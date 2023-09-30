@@ -6,14 +6,25 @@ from sklearn.model_selection import train_test_split
 from itertools import product
 import mlflow
 import pandas as pd
-
+from sklearn.datasets import make_classification
 
 def ab_auto_runner(configs_path: str):
     # read configurations from the specified yaml file
     configs = read_yaml_file(configs_path)
     # todo : read model data and change below line
-    data = load_iris()
-    X, y = data.data, data.target
+    # Create a synthetic dataset
+    #X, y = make_classification(n_samples=100,n_classes = 2 ,n_features=2, n_informative=2, n_redundant=0, random_state=42)
+    X, y = make_classification(
+    n_samples=300, 
+    n_features=2, 
+    n_informative=2, 
+    n_redundant=0, 
+    n_classes=3, 
+    n_clusters_per_class=1, 
+    random_state=42
+)
+    #data = load_iris()
+    #X, y = data.data, data.target
 
     # Split the Data into training and testing
     X_train, X_test, y_train, y_test = train_test_split(
@@ -45,7 +56,7 @@ def ab_auto_runner(configs_path: str):
 
                 # Log the hyperparameters
                 mlflow.log_params(params_dict)
-
+                mlflow.log_param('model_name', model_name)
                 # Log evaluation metrics (e.g., accuracy, F1-score)
                 accuracy = model.score(X_test, y_test)
                 mlflow.log_metric("accuracy", accuracy)

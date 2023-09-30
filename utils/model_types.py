@@ -1,3 +1,6 @@
 from sklearn.ensemble import RandomForestClassifier
-
-model_class_names = {"random_forest": RandomForestClassifier}
+from sklearn import svm
+model_class_names = {
+    "random_forest": RandomForestClassifier,
+    "svm": svm.SVC
+    }
