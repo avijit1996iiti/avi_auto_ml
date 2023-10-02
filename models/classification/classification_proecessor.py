@@ -28,10 +28,6 @@ class ClassificationModels:
         )
 
         for model_name in self.configs["models_to_run"].keys():
-            model = self.model_class_names[
-                model_name
-            ]  # You can use any scikit-learn model
-
             # Step 5: Define Hyperparameter Grid
             param_grid = self.configs["models_to_run"][model_name]
 
@@ -44,7 +40,12 @@ class ClassificationModels:
             ).to_dict("r"):
                 with mlflow.start_run():
                     # Create and train the model with the current hyperparameters
-                    model = self.model_class_names[model_name](**params_dict)
+                    # model = self.model_class_names[model_name](**params_dict)
+                    model = self.model_class_names[self.configs["model_type"]][
+                        model_name
+                    ](
+                        **params_dict
+                    )  # You can use any scikit-learn model
                     # todo : add cross validation
                     model.fit(X_train, y_train)
 
