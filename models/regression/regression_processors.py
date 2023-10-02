@@ -1,9 +1,10 @@
-from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from itertools import product
 import mlflow
 import pandas as pd
-from sklearn.datasets import make_classification
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import LinearRegression
 
 
 class RegressionModels:
@@ -15,21 +16,11 @@ class RegressionModels:
 
     def _execute(self):
         # Import necessary libraries
-        import numpy as np
-        from sklearn.datasets import load_boston
-        from sklearn.model_selection import train_test_split, cross_val_score
-        from sklearn.linear_model import LinearRegression
 
-        # todo : remove below commented lines
-        """
-        # Load the Boston Housing dataset
-        boston = load_boston()
-        X = boston.data
-        y = boston.target
-        """
         model_data_df = pd.read_csv(self.configs["model_data"])
-        X = model_data_df.drop("target", axis=1).values
-        y = model_data_df["target"].values
+        X = model_data_df[self.configs["independent_variables"]].values
+        y = model_data_df[self.configs["dependent_variable"]].values
+
         # Perform train-test split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42
