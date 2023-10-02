@@ -2,7 +2,6 @@ model_type: "regression"
 model_data: "data/input/regression/regression_dummy_data.csv"
 independent_variables: ['0','1','2','3','4','5','6','7','8','9','10','11','12']
 dependent_variable: 'target'
-experiment_id : 'regression'
 models_to_run: {
   "random_forest_regressor": {
     'n_estimators': [50, 100, 150],
