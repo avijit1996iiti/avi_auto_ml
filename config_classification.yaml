@@ -1,6 +1,9 @@
 model_type: "classification"
-model_data: 
+model_data: "data/input/classification/classification_dummy_data.csv"
+independent_variables: ['0','1']
+dependent_variable: 'target'
 number_of_classes: 2
+experiment_id : 'classification'
 models_to_run: {
   'random_forest': {
     'n_estimators': [50, 100, 150],

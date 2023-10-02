@@ -14,4 +14,5 @@ X, y = make_classification(
 X = pd.DataFrame(X)
 y = pd.DataFrame(y, columns=["target"])
 data_df = pd.concat([X, y], axis=1)
-data_df.to_csv("classification_dummy_data.csv", index=None)
+# data_df.to_csv("classification_dummy_data.csv", index=None)
+print(data_df[[0, 1]].head().values)

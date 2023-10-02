@@ -20,11 +20,16 @@ class RegressionModels:
         from sklearn.model_selection import train_test_split, cross_val_score
         from sklearn.linear_model import LinearRegression
 
+        # todo : remove below commented lines
+        """
         # Load the Boston Housing dataset
         boston = load_boston()
         X = boston.data
         y = boston.target
-
+        """
+        model_data_df = pd.read_csv(self.configs["model_data"])
+        X = model_data_df.drop("target", axis=1).values
+        y = model_data_df["target"].values
         # Perform train-test split
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42

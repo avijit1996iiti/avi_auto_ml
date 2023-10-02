@@ -14,20 +14,10 @@ class ClassificationModels:
         self._execute()
 
     def _execute(self):
-        # todo : read model data and change below line
-        # Create a synthetic dataset
-        # X, y = make_classification(n_samples=100,n_classes = 2 ,n_features=2, n_informative=2, n_redundant=0, random_state=42)
-        X, y = make_classification(
-            n_samples=300,
-            n_features=2,
-            n_informative=2,
-            n_redundant=0,
-            n_classes=3,
-            n_clusters_per_class=1,
-            random_state=42,
-        )
-        # data = load_iris()
-        # X, y = data.data, data.target
+        # read data from source
+        model_data_df = pd.read_csv(self.configs["model_data"])
+        X = model_data_df[self.configs["independent_variables"]].values
+        y = model_data_df[self.configs["dependent_variable"]].values
 
         # Split the Data into training and testing
         X_train, X_test, y_train, y_test = train_test_split(
@@ -70,4 +60,3 @@ class ClassificationModels:
                     # todo : add model signature
                     # todo : add all test metrics
                     # todo : add feature of regression
-        print("Inside Classification Class")
