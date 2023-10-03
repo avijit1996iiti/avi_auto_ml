@@ -1,4 +1,4 @@
-## AutoABML
+# AutoABML
 
 ## Overview
 AutoABML stands as a cutting-edge Python library engineered to transform the machine learning sphere through the automation of the entire model selection and hyperparameter tuning process. Its primary goal is to provide a seamless experience for both novices and seasoned data scientists, enabling them to effortlessly craft high-performance machine learning models. The library not only simplifies the complex tasks of model selection and hyperparameter tuning but also empowers users to navigate the complete lifecycle of their ML models.
