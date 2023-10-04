@@ -21,4 +21,5 @@ models_to_run: {
 train_test_split: { 
   test_size: 0.2 
 
-} 
+}
+num_folds: 10 
