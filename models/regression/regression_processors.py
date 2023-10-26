@@ -1,4 +1,3 @@
-from sklearn.model_selection import train_test_split
 from itertools import product
 import mlflow
 import pandas as pd
@@ -28,10 +27,10 @@ class RegressionModels:
             random_state=42,
         )
         for model_name in self.configs["models_to_run"].keys():
-            # Step 5: Define Hyperparameter Grid
+            # Define Hyperparameter Grid
             param_grid = self.configs["models_to_run"][model_name]
 
-            # Step 6: Generate all possible combinations of hyperparameters
+            # Generate all possible combinations of hyperparameters
             param_combinations = list(product(*param_grid.values()))
 
             # perform grid search with logging every information in mlflow
@@ -99,19 +98,6 @@ class RegressionModels:
                     mlflow.sklearn.log_model(model, "model")
                     # todo : add model signature
                     # todo : explore different options to get cv metrics
-
-                    """
-                    # Perform cross-validation on the training set
-                    cross_val_scores = cross_val_score(
-                        model, X_train, y_train, cv=5, scoring="r2"
-                    )
-
-                    # Print the cross-validation scores on the training set
-                    print("Cross-Validation Scores on Training Set:", cross_val_scores)
-                    print("Mean R^2 Score on Training Set:", np.mean(cross_val_scores))
-
-                    print("Inside Regression class")
-                    """
 
     def evaluate_model_prediction(self, y_true, y_pred, segement_of_data):
         from sklearn.metrics import explained_variance_score
