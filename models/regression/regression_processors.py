@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import cross_val_score, KFold, train_test_split
 
+from utils.evaluate_model_prediction import evaluate_regression_model_prediction
+from utils.cross_validation_results import get_cross_validation_results
+
 
 class RegressionModels:
     def __init__(self, model_class_names, configs) -> None:
@@ -45,6 +48,8 @@ class RegressionModels:
                         **params_dict
                     )  # You can use any scikit-learn model
                     # todo : add cross validation
+                    get_cross_validation_results(model, self.configs, X_train, y_train)
+                    """
                     #  Cross-Validation Setup
                     kf = KFold(
                         n_splits=self.configs["num_folds"],
@@ -63,25 +68,27 @@ class RegressionModels:
                     )
                     cv_scorees_df.loc[0, :] = rmse_scores
                     cv_scorees_df.to_csv(
-                        "/home/avijit/selflearning/auto_ml/avi_auto_ml/data/output/regression/cross_validation_scores.csv",
+                        self.configs["artifact_path"] + "cross_validation_scores.csv",
                         index=None,
                     )
+                    """
                     mlflow.log_artifact(
-                        "/home/avijit/selflearning/auto_ml/avi_auto_ml/data/output/regression/cross_validation_scores.csv"
+                        self.configs["artifact_path"] + "cross_validation_scores.csv",
                     )
                     # Assessing Model Performance
+                    """
                     mean_rmse = np.mean(rmse_scores)
                     std_rmse = np.std(rmse_scores)
                     mlflow.log_metrics(
                         {"cv_mean_rmse": mean_rmse, "cv_std_rmse": std_rmse}
                     )
-
+                    """
                     # Log the hyperparameters
                     mlflow.log_params(params_dict)
                     mlflow.log_param("model_name", model_name)
                     model.fit(X_train, y_train)
                     train_prediction = model.predict(X_train)
-                    train_evaluation_dict = self.evaluate_model_prediction(
+                    train_evaluation_dict = evaluate_regression_model_prediction(
                         y_train, train_prediction, "train"
                     )
 
@@ -89,7 +96,7 @@ class RegressionModels:
 
                     # Evaluate the model on the test set
                     test_prediction = model.predict(X_test)
-                    test_evaluation_dict = self.evaluate_model_prediction(
+                    test_evaluation_dict = evaluate_regression_model_prediction(
                         y_test, test_prediction, "test"
                     )
                     mlflow.log_metrics(test_evaluation_dict)
@@ -98,28 +105,3 @@ class RegressionModels:
                     mlflow.sklearn.log_model(model, "model")
                     # todo : add model signature
                     # todo : explore different options to get cv metrics
-
-    def evaluate_model_prediction(self, y_true, y_pred, segement_of_data):
-        from sklearn.metrics import explained_variance_score
-        from sklearn.metrics import mean_absolute_error
-        from sklearn.metrics import mean_squared_error
-        from sklearn.metrics import r2_score
-
-        # Measures the average absolute differences between actual and predicted values.
-        mae = mean_absolute_error(y_true, y_pred)
-        # Measures the average squared differences between actual and predicted values.
-        mse = mean_squared_error(y_true, y_pred)
-        # Represents the square root of the MSE, providing an interpretable scale.
-        rmse = np.sqrt(mse)
-        # Indicates the proportion of the variance in the dependent variable that is predictable from the independent variables.
-        r2 = r2_score(y_true, y_pred)
-        # Measures the proportion to which the model explains the variance of the target variable.
-        explained_variance = explained_variance_score(y_true, y_pred)
-
-        return {
-            f"{segement_of_data}_mae": mae,
-            f"{segement_of_data}_mse": mse,
-            f"{segement_of_data}_rmse": rmse,
-            f"{segement_of_data}_r2": r2,
-            f"{segement_of_data}_explained_variance": explained_variance,
-        }

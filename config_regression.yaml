@@ -1,5 +1,6 @@
 model_type: "regression"
 model_data: "data/input/regression/regression_dummy_data.csv"
+artifact_path: "/home/avijit/selflearning/auto_ml/avi_auto_ml/data/output/regression/"
 independent_variables: ['0','1','2','3','4','5','6','7','8','9','10','11','12']
 dependent_variable: 'target'
 models_to_run: {
