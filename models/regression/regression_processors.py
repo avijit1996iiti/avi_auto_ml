@@ -6,6 +6,7 @@ from sklearn.model_selection import cross_val_score, KFold, train_test_split
 
 from utils.evaluate_model_prediction import evaluate_regression_model_prediction
 from utils.cross_validation_results import get_cross_validation_results
+from utils.log_model_with_signature import log_model_with_signature
 
 
 class RegressionModels:
@@ -16,8 +17,6 @@ class RegressionModels:
         self._execute()
 
     def _execute(self):
-        # Import necessary libraries
-
         model_data_df = pd.read_csv(self.configs["model_data"])
         X = model_data_df[self.configs["independent_variables"]].values
         y = model_data_df[self.configs["dependent_variable"]].values
@@ -49,29 +48,7 @@ class RegressionModels:
                     )  # You can use any scikit-learn model
                     # todo : add cross validation
                     get_cross_validation_results(model, self.configs, X_train, y_train)
-                    """
-                    #  Cross-Validation Setup
-                    kf = KFold(
-                        n_splits=self.configs["num_folds"],
-                        shuffle=True,
-                        random_state=42,
-                    )
 
-                    # Training and Testing the Model with Cross-Validation
-                    # In scikit-learn's cross-validation, the convention is to maximize the scoring function that is why neg_mean_squared_error is ued
-                    mse_scores = cross_val_score(
-                        model, X_train, y_train, scoring="neg_mean_squared_error", cv=kf
-                    )
-                    rmse_scores = np.sqrt(-mse_scores)
-                    cv_scorees_df = pd.DataFrame(
-                        columns=[f"fold{i+1}" for i in range(self.configs["num_folds"])]
-                    )
-                    cv_scorees_df.loc[0, :] = rmse_scores
-                    cv_scorees_df.to_csv(
-                        self.configs["artifact_path"] + "cross_validation_scores.csv",
-                        index=None,
-                    )
-                    """
                     mlflow.log_artifact(
                         self.configs["artifact_path"] + "cross_validation_scores.csv",
                     )
@@ -102,6 +79,12 @@ class RegressionModels:
                     mlflow.log_metrics(test_evaluation_dict)
 
                     # Log the trained model as an artifact
-                    mlflow.sklearn.log_model(model, "model")
+                    log_model_with_signature(
+                        model=model,
+                        model_data_df=model_data_df,
+                        configs=self.configs,
+                        train_prediction=train_prediction,
+                    )
+                    # mlflow.sklearn.log_model(model, "model")
                     # todo : add model signature
                     # todo : explore different options to get cv metrics

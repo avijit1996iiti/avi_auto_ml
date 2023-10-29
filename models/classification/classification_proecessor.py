@@ -7,9 +7,9 @@ import pandas as pd
 from sklearn.datasets import make_classification
 from sklearn.model_selection import cross_val_score, KFold, train_test_split
 
-
 from utils.evaluate_model_prediction import evaluate_classification_model_prediction
 from utils.cross_validation_results import get_cross_validation_results
+from utils.log_model_with_signature import log_model_with_signature
 
 
 class ClassificationModels:
@@ -89,9 +89,12 @@ class ClassificationModels:
                     )
 
                     mlflow.log_metrics(test_evaluation_dict)
+                    log_model_with_signature(
+                        model=model,
+                        model_data_df=model_data_df,
+                        configs=self.configs,
+                        train_prediction=train_prediction,
+                    )
 
-                    # Log the trained model as an artifact
-                    mlflow.sklearn.log_model(model, "model")
-                    # todo : add model signature
                     # todo : add all test metrics
                     # todo : add cross validation feature
