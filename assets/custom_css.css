@@ -1,0 +1,20 @@
+/* custom class */
+.custom_dropdown_width{
+  
+    width: 50%;
+    padding: 0.5rem;
+  }
+  
+  
+  .label-color{
+    color: rgb(116,0,84);
+    padding: 0.5rem;
+    width: 50%;
+    
+  
+  }
+  
+  .custom_attribute_dropdown_width{
+    width: 70%;
+    padding: 0.5rem;
+  }
